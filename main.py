@@ -3,17 +3,29 @@ import matplotlib.pyplot as plt
 from collections import Counter
 import zipfile
 import os
+import re
 
 source_file = '21193_Sinhala.txt'
 index_number = '200144X'
+
+# Function to filter non-words
+def is_sinhala_word(word):
+    # Sinhala Unicode block ranges from 0D80 to 0DFF
+    sinhala_char_range = re.compile(r'^[\u0D80-\u0DFF]+$')
+    return sinhala_char_range.match(word)
 
 # Read the text file
 with open(source_file, 'r', encoding='utf-8') as file:
     text = file.read()
 
-# Calculate word frequencies
+# Split text into words
 words = text.split()
-word_freq = Counter(words)
+
+# Filter words to include only Sinhala words
+sinhala_words = [word for word in words if is_sinhala_word(word)]
+
+# Calculate word frequencies
+word_freq = Counter(sinhala_words)
 
 # Save word frequencies to Frq.csv
 frq_df = pd.DataFrame(word_freq.items(), columns=['Word', 'Freq'])
@@ -33,12 +45,14 @@ frq_df = frq_df.sort_values(by='Rank')
 # Save ranks to Rank.csv
 frq_df.to_csv('Rank.csv', index=False)
 
-# Plot rank vs frequency graph
+# Plot rank vs frequency graph with logarithmic scales
 plt.figure(figsize=(10, 6))
-plt.plot(frq_df['Rank'], frq_df['Freq'], marker='o')
+plt.plot(frq_df['Rank'], frq_df['Freq'], marker='o', linestyle='None')
+plt.xscale('log')
+plt.yscale('log')
 plt.xlabel('Rank')
 plt.ylabel('Frequency')
-plt.title('Rank vs Frequency')
+plt.title('Rank vs Frequency (Log-Log Scale)')
 plt.grid(True)
 plt.savefig('Graph.png')
 
