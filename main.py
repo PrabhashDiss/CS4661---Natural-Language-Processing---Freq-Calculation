@@ -3,38 +3,20 @@ import matplotlib.pyplot as plt
 from collections import Counter
 import zipfile
 import os
-import re
+from sinlingua.preprocessor.tokenizer import SinhalaTokenizer
 
 source_file = '21193_Sinhala.txt'
 index_number = '200144X'
 
-# Function to filter non-words
-def is_sinhala_word(word):
-    # Sinhala Unicode block ranges from 0D80 to 0DFF
-    sinhala_char_range = re.compile(r'^[\u0D80-\u0DFF]+$')
-    return sinhala_char_range.match(word)
+# Create an object of SinhalaTokenizer class
+tokenizer = SinhalaTokenizer()
 
 # Read the text file
 with open(source_file, 'r', encoding='utf-8') as file:
     text = file.read()
 
-# Split text into words
-words = text.split()
-
-# Filter words to include only Sinhala words
-sinhala_words = []
-non_sinhala_words = []
-
-for word in words:
-    if is_sinhala_word(word):
-        sinhala_words.append(word)
-    else:
-        non_sinhala_words.append(word)
-
-# Write non-Sinhala words to a separate file
-with open('non_sinhala_words.txt', 'w', encoding='utf-8') as file:
-    for word in non_sinhala_words:
-        file.write(f"{word}\n")
+# Tokenize the text into Sinhala words
+sinhala_words = tokenizer.tokenize(text)
 
 # Calculate word frequencies
 word_freq = Counter(sinhala_words)
