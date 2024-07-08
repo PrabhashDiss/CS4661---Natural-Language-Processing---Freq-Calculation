@@ -22,7 +22,19 @@ with open(source_file, 'r', encoding='utf-8') as file:
 words = text.split()
 
 # Filter words to include only Sinhala words
-sinhala_words = [word for word in words if is_sinhala_word(word)]
+sinhala_words = []
+non_sinhala_words = []
+
+for word in words:
+    if is_sinhala_word(word):
+        sinhala_words.append(word)
+    else:
+        non_sinhala_words.append(word)
+
+# Write non-Sinhala words to a separate file
+with open('non_sinhala_words.txt', 'w', encoding='utf-8') as file:
+    for word in non_sinhala_words:
+        file.write(f"{word}\n")
 
 # Calculate word frequencies
 word_freq = Counter(sinhala_words)
