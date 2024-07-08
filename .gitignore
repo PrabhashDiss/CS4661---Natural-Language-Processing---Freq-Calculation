@@ -1,2 +1,9 @@
 # Virtual environment
 env/
+
+# Generated files
+Frq.csv
+FrFr.csv
+Rank.csv
+Graph.png
+200144X.zip
