@@ -48,6 +48,14 @@ plt.xlabel('Rank')
 plt.ylabel('Frequency')
 plt.title('Rank vs Frequency (Log-Log Scale)')
 plt.grid(True)
+
+# Plot the line representing f * r = constant
+# Calculate the constant (mean of f * r)
+constant = (frq_df['Freq'] * frq_df['Rank']).mean()
+plt.plot(frq_df['Rank'], constant / frq_df['Rank'], linestyle='-', color='r', label='f * r = constant')
+
+plt.legend()
+
 plt.savefig('Graph.png')
 
 # Create a zip file
